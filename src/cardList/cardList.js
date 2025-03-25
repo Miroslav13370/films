@@ -12,8 +12,22 @@ function CardList({ filmList }) {
   useEffect(() => {
     if (filmList !== "load") {
       const list = filmList.map((elem) => {
-        const { overview } = elem;
-        return <Card overview={overview} />;
+        const {
+          overview,
+          poster_path: posterPath,
+          title,
+          release_date: releaseDate,
+          popularity,
+        } = elem;
+        return (
+          <Card
+            overview={overview}
+            posterPath={posterPath}
+            title={title}
+            releaseDate={releaseDate}
+            key={popularity}
+          />
+        );
       });
       setlistCard(list);
     }

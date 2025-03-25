@@ -1,6 +1,6 @@
 const sendApi = {
   _baseUrl: "https://api.themoviedb.org/3/search/movie?query=",
-  _serch: "film",
+  _serch: "big",
   _page: "1",
 
   async getRespons(url, serh, page) {

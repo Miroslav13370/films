@@ -1,0 +1,17 @@
+.wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: 451px 451px;
+  grid-template-rows: 280px 280px 280px;
+  gap: 37px;
+  width: 1010px;
+  background-color: white;
+  box-sizing: border-box;
+  height: 1147px;
+  padding-left: 32px;
+  padding-top: 20px;
+}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import sendApi from "../sendApi/sendApi";
 import CardList from "../cardList/cardList";
+import "./app.css";
 
 function App() {
   const [filmList, setFilmList] = useState("load");
@@ -14,8 +15,10 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <CardList filmList={filmList} />
+    <div className="wrap">
+      <div className="body">
+        <CardList filmList={filmList} />
+      </div>
     </div>
   );
 }
