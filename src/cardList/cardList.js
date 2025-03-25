@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Card from "../card/card";
+import Loading from "../loading/loading";
 
 function CardList({ filmList }) {
-  const load = () => {
-    return <>Загрузка</>;
-  };
-
-  const [listCard, setlistCard] = useState(load);
+  const [listCard, setlistCard] = useState(Loading);
 
   useEffect(() => {
-    if (filmList !== "load") {
+    if (filmList[0]) {
       const list = filmList.map((elem) => {
         const {
           overview,
@@ -30,6 +27,8 @@ function CardList({ filmList }) {
         );
       });
       setlistCard(list);
+    } else {
+      setlistCard(filmList);
     }
   }, [filmList]);
 
