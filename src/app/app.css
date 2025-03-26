@@ -1,17 +1,22 @@
 .wrap {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.inp {
+  width: 1000px;
 }
 
 .body {
   display: grid;
-  grid-template-columns: 451px 451px;
-  grid-template-rows: 280px 280px 280px;
+  grid-template-columns: 451px 451px 451px;
+  grid-template-rows: 280px 280px 280px 280px 280px 280px 280px 280px;
   gap: 37px;
-  width: 1010px;
+  width: 1490px;
   background-color: white;
   box-sizing: border-box;
-  height: 1147px;
+  height: 2500px;
   padding-left: 32px;
   padding-top: 20px;
 }

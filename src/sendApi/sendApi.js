@@ -24,9 +24,13 @@ const sendApi = {
     }
   },
 
-  async getApi() {
+  async getApi(serch = "film", page1 = "1") {
     try {
-      const resilt = await this.getRespons(this._baseUrl, this._serch, this._page);
+      if (!serch) {
+        const resilt = await this.getRespons(this._baseUrl, "film", page1);
+        return resilt;
+      }
+      const resilt = await this.getRespons(this._baseUrl, serch, page1);
       return resilt;
     } catch (e) {
       console.log("ошибка");
