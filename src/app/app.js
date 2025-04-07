@@ -1,8 +1,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Online, Offline } from "react-detect-offline";
-import { Input, Pagination } from "antd";
+import { Input, Pagination, Tabs } from "antd";
 import { debounce } from "lodash";
+import CardContext from "../CardContext/CardContext";
 import sendApi from "../sendApi/sendApi";
 import CardList from "../cardList/cardList";
 import "./app.css";
@@ -16,6 +17,9 @@ function App() {
   const [value, setvalue] = useState("");
   const [sech, setSech] = useState("Film");
   const [pagees, setpagees] = useState("1");
+  const [stars, setStars] = useState({});
+  const [riteFilm, addRiteFilm] = useState(Loading);
+  const { TabPane } = Tabs;
   const chandeValue = (e) => {
     setvalue(e.target.value);
   };
@@ -52,26 +56,45 @@ function App() {
     setpagees(page);
   };
 
+  const handleTadChange = () => {
+    sendApi.getRaited(localStorage.getItem("session")).then((arr) => {
+      console.log(arr);
+      addRiteFilm(arr.results);
+    });
+  };
+
   return (
-    <>
+    <CardContext.Provider value={useMemo(() => ({ stars, setStars }), [stars, setStars])}>
       <Offline>
         <NoInternet />
       </Offline>
       <Online>
-        <div className="wrap">
-          <Search
-            placeholder="input search loading default"
-            className="inp"
-            value={value}
-            onChange={chandeValue}
-          />
-          <div className="body">
-            <CardList filmList={filmList} />
-          </div>
-          <Pagination defaultCurrent={1} total={500} onChange={changePage} />
-        </div>
+        <Tabs defaultActiveKey="1" centered onChange={handleTadChange}>
+          <TabPane tab="Search" key="1">
+            <div className="wrap">
+              <Search
+                placeholder="input search loading default"
+                className="inp"
+                value={value}
+                onChange={chandeValue}
+              />
+              <div className="body">
+                <CardList filmList={filmList} />
+              </div>
+              <Pagination defaultCurrent={1} total={500} onChange={changePage} />
+            </div>
+          </TabPane>
+          <TabPane tab="Rated" key="2">
+            <div className="wrap">
+              <div className="body">
+                <CardList filmList={riteFilm} />
+              </div>
+              <Pagination defaultCurrent={1} total={500} onChange={changePage} />
+            </div>
+          </TabPane>
+        </Tabs>
       </Online>
-    </>
+    </CardContext.Provider>
   );
 }
 

@@ -18,6 +18,7 @@ function CardList({ filmList }) {
             title={title}
             releaseDate={releaseDate}
             key={id}
+            id={id}
           />
         );
       });

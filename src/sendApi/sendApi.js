@@ -37,6 +37,63 @@ const sendApi = {
       return null;
     }
   },
+
+  async getSession() {
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhYTM0NzQxMDJiNjgzMmY1MTQ4NjA2MDRmOWE5YmE5OSIsIm5iZiI6MTc0MjY3NjMwMi45MzQsInN1YiI6IjY3ZGYyMTRlMjEwZmE4MGEwZjRkODEyYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.NTep8uYhcMawKyQJoGlOztmHCwEPOrDrSIPZ7qm6VlI",
+      },
+    };
+
+    const respons = await fetch(
+      "https://api.themoviedb.org/3/authentication/guest_session/new",
+      options,
+    );
+    const responsJson = await respons.json();
+    return responsJson.guest_session_id;
+  },
+
+  async addRating(value, sessionId, filmId) {
+    const options = {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json;charset=utf-8",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhYTM0NzQxMDJiNjgzMmY1MTQ4NjA2MDRmOWE5YmE5OSIsIm5iZiI6MTc0MjY3NjMwMi45MzQsInN1YiI6IjY3ZGYyMTRlMjEwZmE4MGEwZjRkODEyYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.NTep8uYhcMawKyQJoGlOztmHCwEPOrDrSIPZ7qm6VlI",
+      },
+      body: `{"value":${value}}`,
+    };
+
+    const respons = await fetch(
+      `https://api.themoviedb.org/3/movie/${filmId}/rating?guest_session_id=${sessionId}`,
+      options,
+    );
+
+    const responsJson = await respons.json();
+    return responsJson;
+  },
+
+  async getRaited(session) {
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhYTM0NzQxMDJiNjgzMmY1MTQ4NjA2MDRmOWE5YmE5OSIsIm5iZiI6MTc0MjY3NjMwMi45MzQsInN1YiI6IjY3ZGYyMTRlMjEwZmE4MGEwZjRkODEyYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.NTep8uYhcMawKyQJoGlOztmHCwEPOrDrSIPZ7qm6VlI",
+      },
+    };
+
+    const res = await fetch(
+      `https://api.themoviedb.org/3/guest_session/${session}/rated/movies?language=en-US&page=1&sort_by=created_at.asc`,
+      options,
+    );
+    const resJson = await res.json();
+    return resJson;
+  },
 };
 
 export default sendApi;
