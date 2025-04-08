@@ -24,10 +24,10 @@ const sendApi = {
     }
   },
 
-  async getApi(serch = "film", page1 = "1") {
+  async getApi(serch = "text", page1 = "1") {
     try {
       if (!serch) {
-        const resilt = await this.getRespons(this._baseUrl, "film", page1);
+        const resilt = await this.getRespons(this._baseUrl, "text", page1);
         return resilt;
       }
       const resilt = await this.getRespons(this._baseUrl, serch, page1);
@@ -93,6 +93,22 @@ const sendApi = {
     );
     const resJson = await res.json();
     return resJson;
+  },
+
+  async getGenre() {
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhYTM0NzQxMDJiNjgzMmY1MTQ4NjA2MDRmOWE5YmE5OSIsIm5iZiI6MTc0MjY3NjMwMi45MzQsInN1YiI6IjY3ZGYyMTRlMjEwZmE4MGEwZjRkODEyYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.NTep8uYhcMawKyQJoGlOztmHCwEPOrDrSIPZ7qm6VlI",
+      },
+    };
+
+    const res = await fetch("https://api.themoviedb.org/3/genre/movie/list?language=en", options);
+    const resJson = await res.json();
+    const { genres } = resJson;
+    return genres;
   },
 };
 

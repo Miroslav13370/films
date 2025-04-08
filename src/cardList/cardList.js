@@ -10,7 +10,15 @@ function CardList({ filmList }) {
   useEffect(() => {
     if (filmList[0]) {
       const list = filmList.map((elem) => {
-        const { overview, poster_path: posterPath, title, release_date: releaseDate, id } = elem;
+        const {
+          overview,
+          poster_path: posterPath,
+          title,
+          release_date: releaseDate,
+          id,
+          genre_ids: genreIds,
+          vote_average: vote,
+        } = elem;
         return (
           <Card
             overview={overview}
@@ -19,6 +27,8 @@ function CardList({ filmList }) {
             releaseDate={releaseDate}
             key={id}
             id={id}
+            genreIds={genreIds}
+            vote={vote}
           />
         );
       });

@@ -1,3 +1,9 @@
+body {
+  background-color: white;
+  margin: 0;
+  padding: 0;
+}
+
 .wrap {
   display: flex;
   align-items: center;
@@ -16,7 +22,26 @@
   width: 1490px;
   background-color: white;
   box-sizing: border-box;
-  height: 2500px;
+  height: 2250px;
   padding-left: 32px;
   padding-top: 20px;
+}
+
+.pagination {
+  padding-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+  .body {
+    grid-template-columns: 451px;
+    grid-template-rows: auto;
+    height: auto;
+    width: 470px;
+    padding-left: 10px;
+    margin-bottom: 30px;
+  }
+
+  .inp {
+    width: 450px;
+  }
 }

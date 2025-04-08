@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Rate } from "antd";
-import PropTypes, { number } from "prop-types";
+import PropTypes from "prop-types";
 import "./card.css";
 import { parseISO, format } from "date-fns";
 import CardContext from "../CardContext/CardContext";
@@ -8,10 +8,11 @@ import fallbackImg from "../image/noloadIMG.png";
 import Loading from "../loading/loading";
 import sendApi from "../sendApi/sendApi";
 
-function Card({ overview, posterPath, title, releaseDate, id }) {
-  const [disc, setDesc] = useState("Нет данных");
+function Card({ overview, posterPath, title, releaseDate, id, genreIds, vote }) {
+  const [disc, setDesc] = useState("Нет данных описания");
   const [date, setdate] = useState("загрузка...");
   const [load, setLoad] = useState(true);
+  const [topRaitColor, setTopRaitColor] = useState("#E90000");
   const { stars, setStars } = useContext(CardContext);
   const handleClickChangeRate = (value) => {
     if (
@@ -19,9 +20,6 @@ function Card({ overview, posterPath, title, releaseDate, id }) {
       !localStorage.getItem("timeSession")
     ) {
       sendApi.getSession().then((result) => {
-        localStorage.clear();
-        localStorage.setItem("session", result);
-        localStorage.setItem("timeSession", Date.now());
         sendApi.addRating(value, result, id);
       });
     } else {
@@ -41,6 +39,19 @@ function Card({ overview, posterPath, title, releaseDate, id }) {
   };
 
   useEffect(() => {
+    if (vote <= 3 && vote < 0) {
+      setTopRaitColor("#E90000");
+    }
+    if (vote > 3 && vote <= 5) {
+      setTopRaitColor("#E97E00");
+    }
+    if (vote > 5 && vote < 7) {
+      setTopRaitColor("#E9D100");
+    }
+    if (vote > 7) {
+      setTopRaitColor("#66E900");
+    }
+
     const arr = overview.split(" ");
     if (arr.length > 25) {
       let srt = "";
@@ -55,9 +66,9 @@ function Card({ overview, posterPath, title, releaseDate, id }) {
     if (releaseDate) {
       setdate(format(parseISO(releaseDate), "MMMM d, yyyy"));
     } else {
-      setdate("В апи нет даты");
+      setdate("Нет данных о дате");
     }
-  }, [overview, releaseDate]);
+  }, [overview, releaseDate, vote]);
   return (
     <div className="card">
       {load && <Loading />}
@@ -75,11 +86,31 @@ function Card({ overview, posterPath, title, releaseDate, id }) {
       />
 
       <div className="text">
-        <p className="title"> {title}</p>
+        <div className="topLine">
+          <p className="title"> {title}</p>
+          <p className="totalRait" style={{ border: `2px solid ${topRaitColor}` }}>
+            {vote.toFixed(1)}
+          </p>
+        </div>
         <p className="release"> {date}</p>
         <div className="genre">
-          <p className="genreTitle">Жанр</p>
-          <p className="genreTitle">Жанр 2</p>
+          {genreIds.length > 0 ? (
+            genreIds.map((idGenre) => {
+              let genreName = "";
+              stars.genre.forEach((elem) => {
+                if (elem.id === idGenre) {
+                  genreName = elem.name;
+                }
+              });
+              return (
+                <p className="genreTitle" key={Math.random()}>
+                  {genreName}
+                </p>
+              );
+            })
+          ) : (
+            <p className="genreTitle">Нет данных о жанре</p>
+          )}
         </div>
         <p className="description">{disc}</p>
         <Rate
@@ -101,6 +132,8 @@ Card.propTypes = {
   releaseDate: PropTypes.string,
   title: PropTypes.string,
   id: PropTypes.number,
+  genreIds: PropTypes.arrayOf(PropTypes.node),
+  vote: PropTypes.string,
 };
 
 export default Card;

@@ -15,7 +15,7 @@ function App() {
   const [filmList, setFilmList] = useState(Loading);
   const { Search } = Input;
   const [value, setvalue] = useState("");
-  const [sech, setSech] = useState("Film");
+  const [sech, setSech] = useState("text");
   const [pagees, setpagees] = useState("1");
   const [stars, setStars] = useState({});
   const [riteFilm, addRiteFilm] = useState(Loading);
@@ -25,6 +25,21 @@ function App() {
   };
 
   useEffect(() => {
+    if (
+      Date.now() - Number(localStorage.getItem("timeSession")) > 86400000 ||
+      !localStorage.getItem("timeSession")
+    ) {
+      sendApi.getSession().then((result) => {
+        localStorage.clear();
+        localStorage.setItem("session", result);
+        localStorage.setItem("timeSession", Date.now());
+      });
+    }
+    sendApi.getGenre().then((res) => {
+      setStars((arr) => {
+        return { ...arr, genre: res };
+      });
+    });
     sendApi
       .getApi(sech, pagees)
       .then((api) => {
@@ -58,7 +73,6 @@ function App() {
 
   const handleTadChange = () => {
     sendApi.getRaited(localStorage.getItem("session")).then((arr) => {
-      console.log(arr);
       addRiteFilm(arr.results);
     });
   };
@@ -81,7 +95,12 @@ function App() {
               <div className="body">
                 <CardList filmList={filmList} />
               </div>
-              <Pagination defaultCurrent={1} total={500} onChange={changePage} />
+              <Pagination
+                defaultCurrent={1}
+                total={500}
+                onChange={changePage}
+                className="pagination"
+              />
             </div>
           </TabPane>
           <TabPane tab="Rated" key="2">
@@ -89,7 +108,12 @@ function App() {
               <div className="body">
                 <CardList filmList={riteFilm} />
               </div>
-              <Pagination defaultCurrent={1} total={500} onChange={changePage} />
+              <Pagination
+                defaultCurrent={1}
+                total={500}
+                onChange={changePage}
+                className="pagination"
+              />
             </div>
           </TabPane>
         </Tabs>
