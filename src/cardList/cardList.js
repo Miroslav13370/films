@@ -8,7 +8,7 @@ function CardList({ filmList }) {
   const [listCard, setlistCard] = useState(Loading);
 
   useEffect(() => {
-    if (filmList[0]) {
+    if (filmList?.[0]) {
       const list = filmList.map((elem) => {
         const {
           overview,
