@@ -13,6 +13,8 @@
 .text {
   padding-left: 20px;
   margin-right: 20px;
+  height: 280px;
+  overflow: auto;
 }
 .topLine {
   display: flex;
@@ -34,6 +36,8 @@
   background-color: white;
   border-radius: 100%;
   box-sizing: border-box;
+  padding-left: 4.5px;
+  padding-right: 4.5px;
 }
 
 .genre {
