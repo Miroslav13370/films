@@ -3,12 +3,13 @@ import PropTypes from "prop-types";
 import Card from "../card/card";
 import Loading from "../loading/loading";
 import Noretult from "../error/noResult";
+import NoAdd from "../error/noAdd";
 
-function CardList({ filmList }) {
+function CardList({ filmList, addList }) {
   const [listCard, setlistCard] = useState(Loading);
 
   useEffect(() => {
-    if (filmList?.[0]) {
+    if (filmList?.[0] && filmList !== "load") {
       const list = filmList.map((elem) => {
         const {
           overview,
@@ -33,10 +34,14 @@ function CardList({ filmList }) {
         );
       });
       setlistCard(list);
+    } else if (filmList === "load") {
+      setlistCard(Loading);
+    } else if (!filmList?.[0] && addList) {
+      setlistCard(NoAdd);
     } else {
       setlistCard(Noretult);
     }
-  }, [filmList]);
+  }, [filmList, addList]);
 
   return listCard;
 }
@@ -44,6 +49,7 @@ function CardList({ filmList }) {
 CardList.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   filmList: PropTypes.objectOf(PropTypes.any),
+  addList: PropTypes.bool,
 };
 
 export default CardList;

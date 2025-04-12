@@ -29,6 +29,7 @@ function Card({ overview, posterPath, title, releaseDate, id, genreIds, vote }) 
             results.forEach((elem) => {
               setStars((arr) => {
                 localStorage.setItem(id, value);
+                localStorage.setItem("useApi", "yes");
                 return { ...arr, [elem.id]: { rate: value } };
               });
             });

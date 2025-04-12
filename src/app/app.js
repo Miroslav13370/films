@@ -12,13 +12,14 @@ import Err from "../error/error";
 import NoInternet from "../error/noInternet";
 
 function App() {
-  const [filmList, setFilmList] = useState(Loading);
+  const [filmList, setFilmList] = useState("load");
   const { Search } = Input;
   const [value, setvalue] = useState("");
   const [sech, setSech] = useState("text");
   const [pagees, setpagees] = useState("1");
   const [stars, setStars] = useState({});
   const [riteFilm, addRiteFilm] = useState(Loading);
+  const [addList, setAddlist] = useState(false);
   const { TabPane } = Tabs;
   const chandeValue = (e) => {
     setvalue(e.target.value);
@@ -71,10 +72,19 @@ function App() {
     setpagees(page);
   };
 
-  const handleTadChange = () => {
-    sendApi.getRaited(localStorage.getItem("session")).then((arr) => {
-      addRiteFilm(arr.results);
-    });
+  const handleTadChange = (key) => {
+    if (localStorage.getItem("useApi")) {
+      sendApi.getRaited(localStorage.getItem("session")).then((arr) => {
+        addRiteFilm(arr.results);
+      });
+    }
+    if (key === "2") {
+      setAddlist(true);
+    }
+
+    if (key === "1") {
+      setAddlist(false);
+    }
   };
 
   return (
@@ -106,7 +116,7 @@ function App() {
           <TabPane tab="Rated" key="2">
             <div className="wrap">
               <div className="body">
-                <CardList filmList={riteFilm} />
+                <CardList filmList={riteFilm} addList={addList} />
               </div>
               <Pagination
                 defaultCurrent={1}
