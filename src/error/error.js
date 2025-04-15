@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Alert } from "antd";
+import { Alert } from 'antd';
 
 function Err() {
   return (

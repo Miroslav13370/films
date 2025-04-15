@@ -1,35 +1,35 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Rate } from "antd";
-import PropTypes from "prop-types";
-import "./card.css";
-import { parseISO, format } from "date-fns";
-import CardContext from "../CardContext/CardContext";
-import fallbackImg from "../image/noloadIMG.png";
-import Loading from "../loading/loading";
-import sendApi from "../sendApi/sendApi";
+import React, { useState, useEffect, useContext } from 'react';
+import { Rate } from 'antd';
+import PropTypes from 'prop-types';
+import './card.css';
+import { parseISO, format } from 'date-fns';
+import CardContext from '../CardContext/CardContext';
+import fallbackImg from '../image/noloadIMG.png';
+import Loading from '../loading/loading';
+import sendApi from '../sendApi/sendApi';
 
 function Card({ overview, posterPath, title, releaseDate, id, genreIds, vote }) {
-  const [disc, setDesc] = useState("Нет данных описания");
-  const [date, setdate] = useState("загрузка...");
+  const [disc, setDesc] = useState('Нет данных описания');
+  const [date, setdate] = useState('загрузка...');
   const [load, setLoad] = useState(true);
-  const [topRaitColor, setTopRaitColor] = useState("#E90000");
+  const [topRaitColor, setTopRaitColor] = useState('#E90000');
   const { stars, setStars } = useContext(CardContext);
   const handleClickChangeRate = (value) => {
     if (
-      Date.now() - Number(localStorage.getItem("timeSession")) > 86400000 ||
-      !localStorage.getItem("timeSession")
+      Date.now() - Number(localStorage.getItem('timeSession')) > 86400000 ||
+      !localStorage.getItem('timeSession')
     ) {
       sendApi.getSession().then((result) => {
         sendApi.addRating(value, result, id);
       });
     } else {
-      sendApi.addRating(value, localStorage.getItem("session"), id).then(() => {
-        sendApi.getRaited(localStorage.getItem("session")).then(({ results }) => {
+      sendApi.addRating(value, localStorage.getItem('session'), id).then(() => {
+        sendApi.getRaited(localStorage.getItem('session')).then(({ results }) => {
           if (results) {
             results.forEach((elem) => {
               setStars((arr) => {
                 localStorage.setItem(id, value);
-                localStorage.setItem("useApi", "yes");
+                localStorage.setItem('useApi', 'yes');
                 return { ...arr, [elem.id]: { rate: value } };
               });
             });
@@ -41,33 +41,33 @@ function Card({ overview, posterPath, title, releaseDate, id, genreIds, vote }) 
 
   useEffect(() => {
     if (vote <= 3 && vote < 0) {
-      setTopRaitColor("#E90000");
+      setTopRaitColor('#E90000');
     }
     if (vote > 3 && vote <= 5) {
-      setTopRaitColor("#E97E00");
+      setTopRaitColor('#E97E00');
     }
     if (vote > 5 && vote < 7) {
-      setTopRaitColor("#E9D100");
+      setTopRaitColor('#E9D100');
     }
     if (vote > 7) {
-      setTopRaitColor("#66E900");
+      setTopRaitColor('#66E900');
     }
 
-    const arr = overview.split(" ");
+    const arr = overview.split(' ');
     if (arr.length > 25) {
-      let srt = "";
+      let srt = '';
       arr.splice(0, 25).forEach((element, i) => {
         srt += `${element} `;
         if (i === 24) {
-          srt += "...";
+          srt += '...';
         }
       });
       setDesc(srt);
     }
     if (releaseDate) {
-      setdate(format(parseISO(releaseDate), "MMMM d, yyyy"));
+      setdate(format(parseISO(releaseDate), 'MMMM d, yyyy'));
     } else {
-      setdate("Нет данных о дате");
+      setdate('Нет данных о дате');
     }
   }, [overview, releaseDate, vote]);
   return (
@@ -97,7 +97,7 @@ function Card({ overview, posterPath, title, releaseDate, id, genreIds, vote }) 
         <div className="genre">
           {genreIds.length > 0 ? (
             genreIds.map((idGenre) => {
-              let genreName = "";
+              let genreName = '';
               stars.genre.forEach((elem) => {
                 if (elem.id === idGenre) {
                   genreName = elem.name;

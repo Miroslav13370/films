@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import Card from "../card/card";
-import Loading from "../loading/loading";
-import Noretult from "../error/noResult";
-import NoAdd from "../error/noAdd";
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import Card from '../card/card';
+import Loading from '../loading/loading';
+import Noretult from '../error/noResult';
+import NoAdd from '../error/noAdd';
 
 function CardList({ filmList, addList }) {
   const [listCard, setlistCard] = useState(Loading);
 
   useEffect(() => {
-    if (filmList?.[0] && filmList !== "load") {
+    if (filmList?.[0] && filmList !== 'load') {
       const list = filmList.map((elem) => {
         const {
           overview,
@@ -34,7 +34,7 @@ function CardList({ filmList, addList }) {
         );
       });
       setlistCard(list);
-    } else if (filmList === "load") {
+    } else if (filmList === 'load') {
       setlistCard(Loading);
     } else if (!filmList?.[0] && addList) {
       setlistCard(NoAdd);
